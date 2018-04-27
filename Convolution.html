@@ -1,0 +1,228 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+		<script src="jquery.js"></script> 
+		<script src="bootstrap/js/bootstrap.js"></script> 
+		
+		<link href="bootstrap/plugin/bootstrap-switch.css" rel="stylesheet">
+		<script src="bootstrap/plugin/bootstrap-switch.js"></script>
+		<style>
+			.border-lr-2x{
+				border-left: 2px solid black;
+				border-right: 2px solid black;
+			}
+			canvas {
+			  width: 100%;
+			  height: auto;
+			  border:1px solid #000000;
+			}
+			canvas, img {
+				image-rendering: optimizeSpeed;
+				image-rendering: -moz-crisp-edges;
+				image-rendering: -webkit-optimize-contrast;
+				image-rendering: optimize-contrast;
+				image-rendering: pixelated;
+				-ms-interpolation-mode: nearest-neighbor;
+				border: 5px solid #ddd;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 bg-primary"> <h1 class="text-center "> <i class="glyphicon glyphicon-picture"></i> <i class="glyphicon glyphicon-random"></i> Operatii de convolutie 2D <h1> </div>
+				<div class="col-xs-12"><br/></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4">
+					<div class="row">
+						<div class="col-xs-12">
+							<canvas id="myCanvas"></canvas>
+						</div>
+						<div class="col-xs-12 text-right">
+							<div class="btn btn-warning col-xs-12 js_LoadImage"> <i class="glyphicon glyphicon-folder-open"></i> Incarca imagine</div>
+							<input type="file" id="imageLoader" name="imageLoader" style="display:none"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-3 ">
+					<div class="row">
+						<div class="col-xs-12"> 
+							<div class="dropdown row">
+							  <button class="btn btn-default dropdown-toggle col-xs-12 btn-info" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+								<i class="glyphicon glyphicon-tasks"></i> Kernel (<span class="js-current-kernel">identitate</span>)<br/>
+								<span class="caret"></span>
+							  </button>
+							  <ul class="dropdown-menu col-xs-12" aria-labelledby="dropdownMenu1">
+								<li><a href="#" data-kernel="[0,0,0, 
+															  0,1,0, 
+															  0,0,0]" data-name="identitate" >identitate</a></li>
+								<li><a href="#" data-kernel="[0.1,0.1,0.1,
+															  0.1,0.1,0.1,
+															  0.1,0.1,0.1]" data-name="box blur">atenuare (box blur)</a></li>
+								<li><a href="#" data-kernel="[0.0625, 0.125 , 0.0625,
+															  0.125 , 0.25  , 0.125 ,
+															  0.0625, 0.125 , 0.0625]" data-name="gaussian blur">atenuare gausiana(gaussian blur)</a></li>
+								<li role="separator" class="divider"></li>
+								<li><a href="#" data-kernel="[0, -1,  0,
+															 -1,  5, -1,
+															  0, -1,  0]" data-name="accentuare">accentuare</a></li>
+								<li><a href="#" data-kernel="[1, 0, -1,
+															  0, 0,  0,
+															 -1, 0,  1]" data-name="detectare contur 1">detectare contur 1</a></li>
+								<li><a href="#" data-kernel="[0, 1, 0,
+															  1,-4, 1,
+															  0, 1, 0]" data-name="detectare contur 2">detectare contur 2</a></li>
+								<li><a href="#" data-kernel="[-1, -1, -1,
+															  -1,  8, -1,
+															  -1, -1, -1]" data-name="detectare contur 3">detectare contur 3</a></li>
+								<li role="separator" class="divider"></li>
+								<li><a href="#" data-kernel="[0.25, 0, -0.25,
+															  0.50, 0, -0.50,
+															  0.25, 0, -0.25]" data-name="Sobel x">Sobel x </a></li>
+								<li><a href="#" data-kernel="[0.25, 0.50, 0.25,
+															  0   , 0   , 0   ,
+															 -0.25,-0.50,-0.25]" data-name="Sobel y">Sobel y </a></li>
+								<li><a href="#" data-kernel="[0.33, 0, -0.33,
+															  0.33, 0, -0.33,
+															  0.33, 0, -0.33]" data-name="Prewitt x">Prewitt x </a></li>
+								<li><a href="#" data-kernel="[0.33, 0.33, 0.33,
+															  0   , 0   , 0   ,
+															 -0.33,-0.33,-0.33]" data-name="Prewitt y">Prewitt y </a></li>
+							  </ul>
+							</div>
+						</div>
+						<div class="col-xs-12 border-lr-2x text-center">
+							<div class="row">
+								<div class="col-xs-12">
+									<input type="text" class="js_kernel col-xs-4"/>
+									<input type="text" class="js_kernel col-xs-4"/>
+									<input type="text" class="js_kernel col-xs-4"/>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<br/>
+									<input type="text" class="js_kernel col-xs-4"/>
+									<input type="text" class="js_kernel col-xs-4"/>
+									<input type="text" class="js_kernel col-xs-4"/>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<br/>
+									<input type="text" class="js_kernel col-xs-4"/>
+									<input type="text" class="js_kernel col-xs-4"/>
+									<input type="text" class="js_kernel col-xs-4"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-1">
+					<div class="btn btn-primary col-xs-12 js_computeConvolution" style="min-height:220px; padding-top:90px;"> <span class="h2">=</span> </div>
+				</div>
+				<div class="col-xs-4">
+					<div class="row">
+						<div class="col-xs-12">
+							<canvas id="myCanvasResult"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 text-center">2016 <br/> Student : Radulescu Marian <br/> Specialitate: GMRV1 <br/> disciplina: SAAPI </div>
+			</div>
+		</div>
+	</body>
+	
+	<script>
+		//$("[name='my-checkbox']").bootstrapSwitch();
+		
+		$(".js_LoadImage").on("click", function(){
+			$("#imageLoader").trigger("click");
+		})
+		
+		
+		var $imageLoader = $('#imageLoader');
+		$imageLoader.on("change", handleImage );
+		
+		var canvas = $('#myCanvas')[0];
+		var ctx = canvas.getContext('2d');
+		init();
+		
+		var canvas2 = $('#myCanvasResult')[0];
+		var ctx2 = canvas2.getContext('2d');
+		
+		function init()
+		{
+		  base_image = new Image();
+		  base_image.src = 'img/lena.jpg';
+		  console.log(base_image);
+		  base_image.onload = function(){
+			ctx.canvas.width	= base_image.width;
+			ctx.canvas.height	= base_image.height;
+			ctx.drawImage(base_image, 0, 0);
+		  }
+		}
+		function handleImage(e){
+			var reader = new FileReader();
+			reader.onload = function(event){
+				var img = new Image();
+				img.onload = function(){
+					canvas.width = img.width;
+					canvas.height = img.height;
+					ctx.drawImage(img,0,0);
+				}
+				img.src = event.target.result;
+			}
+			reader.readAsDataURL(e.target.files[0]);     
+		}
+		
+		/**
+		 * img		- matrix 2x2 of picture
+		 * k		- convolution matrix (kernel)
+		 */
+		var conv3x3 = function( img, k )
+		{
+			w = img.width;
+			conv_data = new Array(); 
+			for( i=0; i<img.data.length; i+=4 )
+			{
+				for( let m =0; m < 3; m++){
+					let n = i+m;
+					conv_data[n]		= ( (img.data[n-(w-1)*4])?img.data[n-(w-1)*4]*k[0] : 0 )
+										+ ( (img.data[n-(w  )*4])?img.data[n-(w  )*4]*k[1] : 0 )
+										+ ( (img.data[n-(w+1)*4])?img.data[n-(w+1)*4]*k[2] : 0 )
+										+ ( (img.data[n-(1  )*4])?img.data[n-(1  )*4]*k[3] : 0 )
+										+ ( (img.data[n        ])?img.data[n        ]*k[4] : 0 )
+										+ ( (img.data[n+(1  )*4])?img.data[n+(1  )*4]*k[5] : 0 )
+										+ ( (img.data[n+(w-1)*4])?img.data[n+(w-1)*4]*k[6] : 0 )
+										+ ( (img.data[n+(w  )*4])?img.data[n+(w  )*4]*k[7] : 0 )
+										+ ( (img.data[n+(w+1)*4])?img.data[n+(w+1)*4]*k[8] : 0 )
+					;
+				}
+				conv_data[i+3] = img.data[i+3]
+			}
+			return conv_data;
+		}
+		
+		$(".js_computeConvolution").on("click", function(){
+			imageData	= ctx.getImageData(0,0,ctx.canvas.width , ctx.canvas.height);
+			kernel		= $(".js_kernel").map( function(){ return $( this ).val(); });
+			imageData.data.set (  conv3x3( imageData, kernel ) );
+			$(ctx2.canvas).attr("width", imageData.width)
+							.attr("height", imageData.height);
+			ctx2.putImageData(imageData, 0, 0);
+		});
+		
+		$("[data-kernel]").on("click", function(){
+			kernel = $(this).data("kernel");
+			for( i= 0 ; i<kernel.length; i++)
+			{
+				$(".js_kernel")[i].value = kernel[i];
+			}
+			$(".js-current-kernel").html( $(this).data("name") );
+		});
+	</script>
+</html>
